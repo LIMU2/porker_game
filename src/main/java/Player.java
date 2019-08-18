@@ -46,17 +46,36 @@ public class Player {
     public String vs(Player player) {
         this.bePrepared();
         player.bePrepared();
-        for (int i = this.pokers.size() - 1; i >= 0; i--) {
-            switch (this.pokers.get(i).compareToSinglePoker(player.pokers.get(i))) {
-                case 1:
-                    return printWin();
-                case -1:
-                    return printLose();
-                case 0:
-                    break;
+        if (this.hasPair() || player.hasPair()) {  // 有对牌的情况
+            if (this.hasPair() && !player.hasPair()) {
+                return printWin();
+            } else if (!this.hasPair() && player.hasPair()) {
+
+                return printLose();
+            } else {  // 都有对牌
+                switch (this.getPairPoker().compareToSinglePoker(player.getPairPoker())) {  // 比较对牌大小
+                    case 1:
+                        return printWin();
+                    case -1:
+                        return printLose();
+                    case 0:
+                        return this.getRemain().vs(player.getRemain());  // 剩下的牌， 递归调用
+                }
             }
+        } else {
+            for (int i = this.pokers.size() - 1; i >= 0; i--) {
+                switch (this.pokers.get(i).compareToSinglePoker(player.pokers.get(i))) {
+                    case 1:
+                        return printWin();
+                    case -1:
+                        return printLose();
+                    case 0:
+                        break;
+                }
+            }
+            return printDraw();
         }
-        return printDraw();
+        return null;
     }
 
     public void reFinePokers() {
