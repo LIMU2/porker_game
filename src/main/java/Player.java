@@ -48,6 +48,22 @@ public class Player {
     public String vs(Player player) {
         this.bePrepared();
         player.bePrepared();
+        if (this.hasThree() || player.hasThree()) {  // 有三牌的情况
+            if (this.hasThree() && !player.hasThree()) {
+                return printWin();
+            } else if (!this.hasThree() && player.hasThree()) {
+                return printLose();
+            } else {  // 都有三牌
+                switch (this.getThreePoker().compareToSinglePoker(player.getThreePoker())) {
+                    case 1:
+                        return printWin();
+                    case -1:
+                        return printLose();
+                    case 0:
+                        return this.getRemain().vs(player.getRemain());  // 剩下的牌， 递归调用
+                }
+            }
+        }
         if (this.hasPair() || player.hasPair()) {  // 有对牌的情况
             if (this.hasPair() && !player.hasPair()) {
                 return printWin();
@@ -125,6 +141,14 @@ public class Player {
         return false;
     }
 
+    public boolean hasThree() {
+        int maxDuplicateNumber = getMaxDuplicateNumber();
+        if (maxDuplicateNumber == 3) {
+            return true;
+        }
+        return false;
+    }
+
     public int getMaxDuplicateNumber() {
         return this.pokers.stream()
                 .map(poker -> poker.getNumber())
@@ -140,6 +164,20 @@ public class Player {
         List<Map.Entry<String, Integer>> res = getCountedDuplicatedPokers();
         for (int i = 0; i < res.size(); i++) {
             if (res.get(i).getValue() == duplicateNumber)  // 如果这张牌的出现次数是2次
+                for (int j = 0; j < this.pokers.size(); j++) {
+                    if (this.pokers.get(j).getNumber() == res.get(i).getKey()) {
+                        return this.pokers.get(j);  // 返回这张牌
+                    }
+                }
+        }
+        return null;
+    }
+
+    public Poker getThreePoker() {
+        int duplicateNumber = 3;
+        List<Map.Entry<String, Integer>> res = getCountedDuplicatedPokers();
+        for (int i = 0; i < res.size(); i++) {
+            if (res.get(i).getValue() == duplicateNumber)  // 如果这张牌的出现次数是3次
                 for (int j = 0; j < this.pokers.size(); j++) {
                     if (this.pokers.get(j).getNumber() == res.get(i).getKey()) {
                         return this.pokers.get(j);  // 返回这张牌
