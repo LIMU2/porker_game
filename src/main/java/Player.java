@@ -157,5 +157,12 @@ public class Player {
                 .collect(Collectors.toList());
     }
 
-
+    public Player getRemain() {
+        if (this.hasPair()) {
+            return new Player(this.name, this.pokers.stream()
+                    .filter(poker -> poker.getNumber() != this.getPairPoker().getNumber())
+                    .collect(Collectors.toList()));
+        }
+        return this;
+    }
 }
