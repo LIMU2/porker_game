@@ -115,4 +115,12 @@ public class Player {
         this.reFinePokers();
         this.sortPokers();
     }
+
+    public boolean hasPair() {
+        int maxDuplicateNumber = getMaxDuplicateNumber();
+        if (maxDuplicateNumber == 2) {
+            return true;
+        }
+        return false;
+    }
 }
