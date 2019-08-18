@@ -1,6 +1,7 @@
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Player {
@@ -51,7 +52,6 @@ public class Player {
             if (this.hasPair() && !player.hasPair()) {
                 return printWin();
             } else if (!this.hasPair() && player.hasPair()) {
-
                 return printLose();
             } else {  // 都有对牌
                 switch (this.getPairPoker().compareToSinglePoker(player.getPairPoker())) {  // 比较对牌大小
@@ -134,4 +134,28 @@ public class Player {
                 .max()
                 .getAsInt();
     }
+
+    public Poker getPairPoker() {  // 只取排在前面的对牌
+        int duplicateNumber = 2;  // pair
+        List<Map.Entry<String, Integer>> res = getCountedDuplicatedPokers();
+        for (int i = 0; i < res.size(); i++) {
+            if (res.get(i).getValue() == duplicateNumber)  // 如果这张牌的出现次数是2次
+                for (int j = 0; j < this.pokers.size(); j++) {
+                    if (this.pokers.get(j).getNumber() == res.get(i).getKey()) {
+                        return this.pokers.get(j);  // 返回这张牌
+                    }
+                }
+        }
+        return null;
+    }
+
+    public List<Map.Entry<String, Integer>> getCountedDuplicatedPokers() {
+        return this.pokers.stream()
+                .map(poker -> poker.getNumber())  // 只比较数字
+                .collect(Collectors.toMap(poker -> poker, poker -> 1, Integer::sum))
+                .entrySet().stream()
+                .collect(Collectors.toList());
+    }
+
+
 }
