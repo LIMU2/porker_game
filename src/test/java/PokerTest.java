@@ -48,4 +48,20 @@ public class PokerTest {
         assertEquals("playerA Win", res);
     }
 
+    @Test
+    public void should_return_playerA_lose_when_playerA_vs_playerB_given_playerA_2H_2C_4H_5H_6H_playerB_3S_3D_4H_5H_6H() {
+        // given
+        Player playerA = new Player("playerA",
+                Arrays.asList(new Poker("2", "H"), new Poker("2", "C"), new Poker("4", "H"), new Poker("5", "H"), new Poker("6", "H")));
+        Player playerB = new Player("playerB",
+                Arrays.asList(new Poker("3", "S"), new Poker("3", "D"), new Poker("4", "H"), new Poker("5", "H"), new Poker("6", "H")));
+
+        // when
+        String res = playerA.vs(playerB);
+
+        // then
+        assertEquals("playerA Lose", res);
+    }
+
+
 }
