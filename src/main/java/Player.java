@@ -1,6 +1,7 @@
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Player {
     private String name;
@@ -122,5 +123,15 @@ public class Player {
             return true;
         }
         return false;
+    }
+
+    public int getMaxDuplicateNumber() {
+        return this.pokers.stream()
+                .map(poker -> poker.getNumber())
+                .collect(Collectors.toMap(poker -> poker, poker -> 1, Integer::sum))
+                .entrySet().stream()
+                .mapToInt(r -> r.getValue())
+                .max()
+                .getAsInt();
     }
 }
