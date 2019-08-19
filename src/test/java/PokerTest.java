@@ -123,4 +123,19 @@ public class PokerTest {
         assertEquals("Draw", res);
     }
 
+    @Test
+    public void should_return_playerA_lose_when_playerA_vs_playerB_given_playerA_3H_4D_5S_6C_7D_playerB_2H_3H_5H_9H_KH() {
+        // given
+        Player playerA = new Player("playerA",
+                Arrays.asList(new Poker("3", "H"), new Poker("4", "D"), new Poker("5", "S"), new Poker("6", "C"), new Poker("7", "D")));
+        Player playerB = new Player("playerB",
+                Arrays.asList(new Poker("2", "H"), new Poker("3", "H"), new Poker("5", "H"), new Poker("9", "H"), new Poker("K", "H")));
+
+        // when
+        String res = playerA.vs(playerB);
+
+        // then
+        assertEquals("playerA Lose", res);
+    }
+
 }
