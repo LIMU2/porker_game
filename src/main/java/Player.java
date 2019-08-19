@@ -214,9 +214,13 @@ public class Player {
     }
 
     public boolean hasPair() {
-        int maxDuplicateNumber = getMaxDuplicateNumber();
-        if (maxDuplicateNumber == 2) {
-            return true;
+        if (this.hasThree()) {
+            return this.getRemain().hasPair();
+        } else {
+            int maxDuplicateNumber = getMaxDuplicateNumber();
+            if (maxDuplicateNumber == 2) {
+                return true;
+            }
         }
         return false;
     }
@@ -316,7 +320,11 @@ public class Player {
     }
 
     public Player getRemain() {
-        if (this.hasPair()) {
+        if (this.hasThree()) {
+            return new Player(this.name, this.pokers.stream()
+                    .filter(poker -> poker.getNumber() != this.getThreePoker().getNumber())
+                    .collect(Collectors.toList()));
+        } else if (this.hasPair()) {
             return new Player(this.name, this.pokers.stream()
                     .filter(poker -> poker.getNumber() != this.getPairPoker().getNumber())
                     .collect(Collectors.toList()));
