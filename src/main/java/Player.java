@@ -48,6 +48,22 @@ public class Player {
     public String vs(Player player) {
         this.bePrepared();
         player.bePrepared();
+        if (this.hasFour() || player.hasFour()) {
+            if (this.hasFour() && !player.hasFour()) {
+                return printWin();
+            } else if (!this.hasFour() && player.hasFour()) {
+                return printLose();
+            } else {  // 都有炸
+                switch (this.pokers.get(this.pokers.size() - 1).compareToSinglePoker(player.pokers.get(this.pokers.size() - 1))) {
+                    case 1:
+                        return printWin();
+                    case -1:
+                        return printLose();
+                    case 0:
+                        return printDraw();
+                }
+            }
+        }
         if (this.hasFullHouse() || player.hasFullHouse()) {
             if (this.hasFullHouse() && !player.hasFullHouse()) {
                 return printWin();
@@ -217,6 +233,14 @@ public class Player {
 
     public boolean hasFullHouse() {
         if (this.hasThree() && this.hasPair()) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean hasFour() {
+        int maxDuplicateNumber = getMaxDuplicateNumber();
+        if (maxDuplicateNumber == 4) {
             return true;
         }
         return false;
