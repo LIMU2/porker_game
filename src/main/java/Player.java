@@ -48,6 +48,22 @@ public class Player {
     public String vs(Player player) {
         this.bePrepared();
         player.bePrepared();
+        if (this.hasFlush() || player.hasFlush()) {
+            if (this.hasFlush() && !player.hasFlush()) {
+                return printWin();
+            } else if (!this.hasFlush() && player.hasFlush()) {
+                return printLose();
+            } else {  // 都有同花
+                switch (this.pokers.get(this.pokers.size() - 1).compareToSinglePoker(player.pokers.get(this.pokers.size() - 1))) {
+                    case 1:
+                        return printWin();
+                    case -1:
+                        return printLose();
+                    case 0:
+                        return printDraw();
+                }
+            }
+        }
         if (this.hasStraight() || player.hasStraight()) {
             if (this.hasStraight() && !player.hasStraight()) {
                 return printWin();
@@ -172,6 +188,15 @@ public class Player {
             }
         }
         return true;
+    }
+
+    public boolean hasFlush() {
+        if (this.pokers.stream()
+                .map(p -> p.getSuit())
+                .distinct().toArray().length == 1) {
+            return true;
+        }
+        return false;
     }
 
     public int getMaxDuplicateNumber() {
