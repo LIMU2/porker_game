@@ -48,6 +48,22 @@ public class Player {
     public String vs(Player player) {
         this.bePrepared();
         player.bePrepared();
+        if (this.hasFullHouse() || player.hasFullHouse()) {
+            if (this.hasFullHouse() && !player.hasFullHouse()) {
+                return printWin();
+            } else if (!this.hasFullHouse() && player.hasFullHouse()) {
+                return printLose();
+            } else {  // 都有三带二
+                switch (this.pokers.get(this.pokers.size() - 1).compareToSinglePoker(player.pokers.get(this.pokers.size() - 1))) {
+                    case 1:
+                        return printWin();
+                    case -1:
+                        return printLose();
+                    case 0:
+                        return printDraw();
+                }
+            }
+        }
         if (this.hasFlush() || player.hasFlush()) {
             if (this.hasFlush() && !player.hasFlush()) {
                 return printWin();
@@ -194,6 +210,13 @@ public class Player {
         if (this.pokers.stream()
                 .map(p -> p.getSuit())
                 .distinct().toArray().length == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean hasFullHouse() {
+        if (this.hasThree() && this.hasPair()) {
             return true;
         }
         return false;
