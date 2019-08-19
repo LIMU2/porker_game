@@ -48,6 +48,22 @@ public class Player {
     public String vs(Player player) {
         this.bePrepared();
         player.bePrepared();
+        if (this.hasStraight() || player.hasStraight()) {
+            if (this.hasStraight() && !player.hasStraight()) {
+                return printWin();
+            } else if (!this.hasStraight() && player.hasStraight()) {
+                return printLose();
+            } else {  // 都有顺子
+                switch (this.pokers.get(this.pokers.size() - 1).compareToSinglePoker(player.pokers.get(this.pokers.size() - 1))) {
+                    case 1:
+                        return printWin();
+                    case -1:
+                        return printLose();
+                    case 0:
+                        return printDraw();
+                }
+            }
+        }
         if (this.hasThree() || player.hasThree()) {  // 有三牌的情况
             if (this.hasThree() && !player.hasThree()) {
                 return printWin();
@@ -147,6 +163,15 @@ public class Player {
             return true;
         }
         return false;
+    }
+
+    public boolean hasStraight() {
+        for (int i = 0; i < this.pokers.size() - 1; i++) {
+            if (Integer.parseInt(this.pokers.get(i + 1).getNumber()) - Integer.parseInt(this.pokers.get(i).getNumber()) != 1) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public int getMaxDuplicateNumber() {

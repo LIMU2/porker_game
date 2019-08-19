@@ -107,4 +107,5 @@ public class PokerTest {
         // then
         assertEquals("playerA Win", res);
     }
+
 }
